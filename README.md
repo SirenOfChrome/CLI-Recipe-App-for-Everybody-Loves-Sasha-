@@ -2,11 +2,11 @@
 This is the repo for the phase 3 group project of Flatiron's Software Engineering Bootcamp 
 
 
-###Recipe Manager
+### Recipe Manager
 
 Recipe Manager is a CLI application that allows users to add, modify, and delete recipes. The application uses a database to store information about the recipes, including ingredients, cooking time, and instructions. Users can search for recipes by name, ingredient, or cuisine.
 
-####Features
+#### Features
 
 > * Add new recipes with title, description, ingredients, and instructions
 > * Manage ingredients with name and unit of measurement
