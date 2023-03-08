@@ -45,16 +45,21 @@ class Instructions(Base):
     def __repr__(self):
         return f'<Instructions {self.instruction_id}>'
 
-'''
-# TODO: Recipe_Ingredients class 
-    - create Recipe_Ingredients class. follow the syntax shown at https://jupyter-tutorial.readthedocs.io/en/stable/data-processing/postgresql/sqlalchemy.html#database-connection
-    - refer to ERD diagram ==> './phase-3-ERD.pdf'
-# TODO: Ingredients Class 
-    - create Recipe_Ingredients class. follow the syntax shown at https://jupyter-tutorial.readthedocs.io/en/stable/data-processing/postgresql/sqlalchemy.html#database-connection
-    - refer to ERD diagram ==> './phase-3-ERD.pdf'
-'''
+class Recipe_Ingredients(Base):
+    __tablename__ = 'recipe_ingredients'
+    recipe_id = Column(Integer, ForeignKey('recipes.id'), primary_key=True)
+    ingredient_id = Column(Integer, ForeignKey('ingredients.id'), primary_key=True)
+    quantity = Column(Integer)
+    
+    recipe = relationship("Recipe", back_populates="ingredients")
+    ingredient = relationship("Ingredient", back_populates="recipes")
+
+class Ingredient(Base):
+    __tablename__ = 'ingredients'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    
+    recipes = relationship("Recipe_Ingredients", back_populates="ingredient")
 
 
-
-recipe1 = Recipe()
 
