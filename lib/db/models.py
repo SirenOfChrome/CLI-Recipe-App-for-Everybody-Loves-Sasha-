@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 
 engine = create_engine("sqlite:///cookbook.db")
-Session = sessionmaker(bind=engine)
+
 Base = declarative_base()
 
 
@@ -66,8 +66,7 @@ class User(Base):
 
 #     recipes = relationship("Recipe_Ingredient", back_populates="ingredient")
 
-Base.metadata.create_all(engine)
-session = Session()
+
 # # Get the recipe you want to delete
 # madison = session.query(User).filter_by(first_name='Madison').first()
 # session.delete(madison)
