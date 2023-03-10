@@ -1,5 +1,5 @@
 import argparse
-
+from .db.models import *
 
 
 def addUser():
