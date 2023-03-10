@@ -44,4 +44,16 @@ def build_ingredient_dictionary():
     print(ingredient_dict)
     return ingredient_dict
 
-    
+def check_ingredients(ingredient_dict):
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    for ingredient_name in ingredient_dict:
+        ingredient = session.query(Ingredient).filter_by(name=ingredient_name).first()
+        if ingredient is None:
+            # Ingredient doesn't exist in the database, so add it
+            ingredient = Ingredient(name=ingredient_name)
+            session.add(ingredient)
+            session.commit()
+            print(f"Added {ingredient_name} to the database!")
+        else:
+            print(f"fyi, {ingredient_name} already exists in the database")
