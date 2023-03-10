@@ -47,6 +47,7 @@ def add_user():
     recipe = add_recipe(current_user)
     session.add(recipe)
     session.commit()
+    return recipe
         
         
 # function to check if a user exists in the database
@@ -56,12 +57,21 @@ def user_exists(session, first_name, last_name):
 
 
 
-def add_recipe_ingredients(recipe_id, ingredient_id, qty): 
+def add_recipe_ingredient(recipe_id, ingredient_id, qty): 
     Session = sessionmaker(bind=engine)
     session = Session()
     recipe_ingredient = Recipe_Ingredient(recipe_id, ingredient_id, qty)
     session.add(recipe_ingredient)
     session.commit()
+    
+def add_all_recipe_ingredients(recipe, ingredient_dict):
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    for ingredient_name, qty in ingredient_dict.items():
+        ingredient = session.query(Ingredient).filter_by(name=ingredient_name).first()
+        add_recipe_ingredient(recipe_id=recipe.recipe_id, ingredient_id=ingredient.ingredient_id, qty=qty)
+    print(f"ingredients for {recipe} added to recipe_ingredients table")
+
 
 
 # function to add a recipe for a given user
