@@ -8,22 +8,20 @@ engine = create_engine("sqlite:///cookbook.db")
 Base = declarative_base()
 
 
-# class Recipe(Base):
-#     __tablename__ = 'recipe'
+class Recipe(Base):
+    __tablename__ = 'recipe'
 
-#     recipe_id = Column(Integer, primary_key=True)
-#     recipe_name = Column(String)
-#     total_cook_time = Column(String)
-#     is_vegetarian = Column(String, nullable=False)
-#     user_id = Column(Integer, ForeignKey('user.user_id'), nullable=False)
-#     instructions_id = Column(Integer, ForeignKey('instructions.instruction_id'), nullable=False)
+    recipe_id = Column(Integer, primary_key=True)
+    recipe_name = Column(String)
+    total_cook_time = Column(String)
+    user_id = Column(Integer, ForeignKey('user.user_id'), nullable=False)
+    instructions = Column(String)
 
-#     user = relationship('User', backref='recipes')
-#     instructions = relationship('Instructions', backref='recipes')
-#     ingredients = relationship("Recipe_Ingredient", back_populates="recipe")
+    user = relationship('User', backref='recipes')
+    ingredients = relationship("Recipe_Ingredient", back_populates="recipe")
 
-#     def __repr__(self):
-#         return f'<Recipe {self.recipe_name}>'
+    def __repr__(self):
+        return f'<Recipe {self.recipe_name}>'
 
 
 class User(Base):
@@ -36,35 +34,24 @@ class User(Base):
     def __repr__(self):
         return f'<User {self.user_name}>'
 
+class Recipe_Ingredient(Base):
+    __tablename__ = 'recipe_ingredient'
 
-class Instructions(Base):
-    __tablename__ = 'instructions'
+    recipe_id = Column(Integer, ForeignKey('recipe.recipe_id'), primary_key=True)
+    ingredient_id = Column(Integer, ForeignKey('ingredient.id'), primary_key=True)
+    quantity = Column(Integer)
 
-    instruction_id = Column(Integer, primary_key=True)
-    instruction_details = Column(String)
-
-    def __repr__(self):
-        return f'<Instructions {self.instruction_id}>'
-
-
-# class Recipe_Ingredient(Base):
-#     __tablename__ = 'recipe_ingredient'
-
-#     recipe_id = Column(Integer, ForeignKey('recipe.recipe_id'), primary_key=True)
-#     ingredient_id = Column(Integer, ForeignKey('ingredient.id'), primary_key=True)
-#     quantity = Column(Integer)
-
-#     recipe = relationship("Recipe", back_populates="ingredients")
-#     ingredient = relationship("Ingredient", back_populates="recipes")
+    recipe = relationship("Recipe", back_populates="ingredients")
+    ingredient = relationship("Ingredient", back_populates="recipes")
 
 
-# class Ingredient(Base):
-#     __tablename__ = 'ingredient'
+class Ingredient(Base):
+    __tablename__ = 'ingredient'
 
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String)
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
 
-#     recipes = relationship("Recipe_Ingredient", back_populates="ingredient")
+    recipes = relationship("Recipe_Ingredient", back_populates="ingredient")
 
 
 # # Get the recipe you want to delete

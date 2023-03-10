@@ -5,8 +5,8 @@ madison = User(first_name="madison", last_name="evans")
 
 
 def main():
-    addUser()
-    addInstructions()
+    user = addUser()
+
 
 
 if __name__ == '__main__':

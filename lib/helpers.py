@@ -13,26 +13,19 @@ def addUser():
     session.add(new_user)
     session.commit()
     print(f"User {first_name} {last_name} successfully added!")
-    return new_user
+    recipe = addRecipe(new_user)
+    session.add(recipe)
+    session.commit()
 
-# def addRecipe(user, instructions): 
-#     Session = sessionmaker(bind=engine)
-#     session = Session()
-#     print("Enter the recipe name: ")
-#     recipe_name = input()
-#     print("How much time is needed to cook this meal? (prep time included): ")
-#     total_cook_time = input()
-#     user_id = user.user_id
-#     instructions_id = instructions.instructions_id
-    
+def addRecipe(user): 
+    print("Enter the recipe name: ")
+    recipe_name = input()
+    print("How much time is needed to cook this meal? (prep time included): ")
+    total_cook_time = input()
+    print("enter each of the instructions, separated by ';' for each step")
+    instructions = input()
+    recipe = Recipe(recipe_name = recipe_name, total_cook_time=total_cook_time, user_id = user.user_id,  instructions=instructions)
+    print("recipe added")
+    return recipe
         
     
-def addInstructions(): 
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    print("type out the instructions separated by commas")
-    instruction_details = input()
-    instructions = Instructions(instruction_details = instruction_details)
-    session.add(instructions)
-    session.commit()
-    print("recipe added")
