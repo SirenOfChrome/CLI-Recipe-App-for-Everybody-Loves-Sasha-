@@ -28,4 +28,15 @@ def addRecipe(user):
     print("recipe added")
     return recipe
         
+def addIngredient(): 
+    ingredient_list = []
+    print("enter in an ingredient along with its quantity, separated by a colon (ex: egg:3)...when you have run out of ingredients, type DONE and hit enter")
+    response = input()
+    while response != "DONE":
+        ingredient_list.append(response)
+        print("waiting for next entry...(type DONE if finished)") 
+        response = input()
+        
+        
+        
     
