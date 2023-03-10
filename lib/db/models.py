@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, create_engine
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-import fire
+
+
 engine = create_engine("sqlite:///cookbook.db")
 Session = sessionmaker(bind=engine)
 Base = declarative_base()
@@ -72,10 +73,3 @@ madison = session.query(User).filter_by(first_name='Madison').first()
 session.delete(madison)
 session.commit()
 
-def projects(fruit):
-    fruits = ['apple','pear','cherry','banana']
-    fruits.append(fruit)
-    print(fruits)
-
-if __name__ == '__main__':
-    fire.Fire(projects)
