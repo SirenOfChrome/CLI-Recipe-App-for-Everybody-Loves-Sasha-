@@ -2,6 +2,7 @@
 import argparse
 from .db.models import *
 from sqlalchemy import func
+import re
 
 # function to add new user
 def add_user():
@@ -83,10 +84,15 @@ def add_recipe(user):
     print("\n")
     
     # prompt user to enter the total cook time for the recipe (prep time included)
-    print("*** How much time is needed to cook this meal? (Write your answer in minutes, prep time included): ")
+    total_cook_time_str = input("*** How much time is needed to cook this meal? (Write your answer in minutes, prep time included): \n")
     print("\n")
-    total_cook_time = input()
-    print("\n")
+    while True:
+        match = re.search(r'\d+', total_cook_time_str)  # Find the first consecutive number in the string
+        if match:
+            total_cook_time = int(match.group())  # Cast the matched string to an integer
+            break  # Exit the loop if a valid number is found
+        else:
+            total_cook_time_str = input("Sorry, you need to enter a number value that represents total minutes. Please update your response now: \n")
     
     # prompt user to enter the instructions for the recipe
     print("*** Enter each of the instructions, separated by ';' for each step")
