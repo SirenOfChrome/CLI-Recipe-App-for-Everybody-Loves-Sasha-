@@ -1,49 +1,83 @@
+# import required packages and modules
 import argparse
 from .db.models import *
 from sqlalchemy import func
 
+# function to add new user
 def add_user():
+    
+    # create a new session to interact with database
     Session = sessionmaker(bind=engine)
     session = Session()
+    
+    # initialize an empty tuple to store user's first and last name
     name_tuple = ()
+    
+    # prompt user to enter first name and add it to name_tuple
     print("Enter your first name:")
     first_name = input()
+    if(first_name == "clear entire db"): 
+        clearDatabase()
+        return
     name_tuple += (first_name,)
+    
+    # prompt user to enter last name and add it to name_tuple
     print("Enter your last name:")
     last_name = input()
     name_tuple += (last_name,)
-    if not user_exists(session, first_name, last_name):
-        new_user = User(first_name=first_name, last_name=last_name)
-        session.add(new_user)
+    
+    # check if user exists in the database using the user_exists function
+    current_user = user_exists(session, first_name, last_name)
+    if not current_user:
+        # if user doesn't exist, create a new User object and add it to the database
+        current_user = User(first_name=first_name, last_name=last_name)
+        session.add(current_user)
         session.commit()
+        # print success message and add a recipe for the new user
         print(f"User {first_name} {last_name} successfully added!")
-        recipe = add_recipe(new_user)
-        session.add(recipe)
-        session.commit()
     else:
-        print(f"Welcom back {first_name} {last_name}!")
+        print(f"Welcome back {first_name} {last_name}!")
         
+    recipe = add_recipe(current_user)
+    session.add(recipe)
+    session.commit()
+        
+        
+# function to check if a user exists in the database
 def user_exists(session, first_name, last_name):
-    return session.query(User).filter(func.lower(User.first_name) == func.lower(first_name), func.lower(User.last_name) == func.lower(last_name)).first() is not None
+    user = session.query(User).filter_by(first_name=first_name, last_name=last_name).first()
+    return user
 
-
+# function to add a recipe for a given user
 def add_recipe(user): 
+    # prompt user to enter the recipe name
     print("Enter the recipe name: ")
     recipe_name = input()
+    
+    # prompt user to enter the total cook time for the recipe (prep time included)
     print("How much time is needed to cook this meal? (prep time included): ")
     total_cook_time = input()
-    print("enter each of the instructions, separated by ';' for each step")
+    
+    # prompt user to enter the instructions for the recipe
+    print("Enter each of the instructions, separated by ';' for each step")
     instructions = input()
-    recipe = Recipe(recipe_name = recipe_name, total_cook_time=total_cook_time, user_id = user.user_id,  instructions=instructions)
-    print("recipe added")
+    
+    # create a new Recipe object and add it to the database
+    recipe = Recipe(recipe_name=recipe_name, total_cook_time=total_cook_time, user_id=user.user_id, instructions=instructions)
+    print("Recipe added")
     return recipe
-        
+
+# function to build a dictionary of ingredients and their quantities
 def build_ingredient_dictionary(): 
+    # initialize an empty dictionary to store ingredient names and quantities
     ingredient_dict = {}
+    
+    # prompt user to enter ingredients and quantities in the format 'ingredient:quantity', separated by a colon
     print("Enter an ingredient (singular-case) along with its quantity, separated by a colon (ex: egg:3). When you're finished, type DONE and hit enter.")
     response = input()
     while response != "DONE":
         try:
+            # split user input to extract ingredient and quantity, convert quantity to integer, and add it to the ingredient_dict
             ingredient, quantity = response.split(":")
             quantity = int(quantity)
             ingredient_dict[ingredient] = quantity
@@ -66,4 +100,18 @@ def check_ingredients(ingredient_dict):
             session.commit()
             print(f"Added {ingredient_name} to the database!")
         else:
-            print(f"fyi, {ingredient_name} already exists in the database")
+            print(f"{ingredient_name} already exists in the database")
+
+# only use this for dev purposes for quick way to clear db
+def clearDatabase(): 
+    
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # delete all rows from each table
+    session.query(Ingredient).delete()
+    session.query(Recipe).delete()
+    session.query(User).delete()
+
+    # commit the changes
+    session.commit()
