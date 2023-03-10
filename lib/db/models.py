@@ -37,14 +37,14 @@ class User(Base):
         return f'<User {self.user_name}>'
 
 
-# class Instructions(Base):
-#     __tablename__ = 'instructions'
+class Instructions(Base):
+    __tablename__ = 'instructions'
 
-#     instruction_id = Column(Integer, primary_key=True)
-#     instruction_details = Column(String)
+    instruction_id = Column(Integer, primary_key=True)
+    instruction_details = Column(String)
 
-#     def __repr__(self):
-#         return f'<Instructions {self.instruction_id}>'
+    def __repr__(self):
+        return f'<Instructions {self.instruction_id}>'
 
 
 # class Recipe_Ingredient(Base):
