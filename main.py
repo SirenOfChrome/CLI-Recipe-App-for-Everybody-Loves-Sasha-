@@ -4,8 +4,8 @@ from lib.db.models import *
 
 
 def main():
-    user = addUser()
-    addIngredient()
+    user = add_user()
+    ingredient_dictionary = build_ingredient_dictionary()
 
 if __name__ == '__main__':
     

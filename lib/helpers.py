@@ -2,7 +2,7 @@ import argparse
 from .db.models import *
 
 
-def addUser():
+def add_user():
     Session = sessionmaker(bind=engine)
     session = Session()
     print("Enter your first name:")
@@ -13,11 +13,11 @@ def addUser():
     session.add(new_user)
     session.commit()
     print(f"User {first_name} {last_name} successfully added!")
-    recipe = addRecipe(new_user)
+    recipe = add_recipe(new_user)
     session.add(recipe)
     session.commit()
 
-def addRecipe(user): 
+def add_recipe(user): 
     print("Enter the recipe name: ")
     recipe_name = input()
     print("How much time is needed to cook this meal? (prep time included): ")
@@ -28,15 +28,20 @@ def addRecipe(user):
     print("recipe added")
     return recipe
         
-def addIngredient(): 
-    ingredient_list = []
-    print("enter in an ingredient along with its quantity, separated by a colon (ex: egg:3)...when you have run out of ingredients, type DONE and hit enter")
+def build_ingredient_dictionary(): 
+    ingredient_dict = {}
+    print("Enter an ingredient (singular-case) along with its quantity, separated by a colon (ex: egg:3). When you're finished, type DONE and hit enter.")
     response = input()
     while response != "DONE":
-        ingredient_list.append(response)
-        print("waiting for next entry...(type DONE if finished)") 
+        try:
+            ingredient, quantity = response.split(":")
+            quantity = int(quantity)
+            ingredient_dict[ingredient] = quantity
+        except ValueError:
+            print(f"Invalid quantity '{quantity}'. Please enter a valid integer.")
+        print("Waiting for next entry... (type DONE if finished)") 
         response = input()
-        
-        
-        
+    print(ingredient_dict)
+    return ingredient_dict
+
     
