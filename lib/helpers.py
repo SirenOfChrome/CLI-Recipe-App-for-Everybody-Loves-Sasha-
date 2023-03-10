@@ -1,21 +1,31 @@
 import argparse
 from .db.models import *
-
+from sqlalchemy import func
 
 def add_user():
     Session = sessionmaker(bind=engine)
     session = Session()
+    name_tuple = ()
     print("Enter your first name:")
     first_name = input()
+    name_tuple += (first_name,)
     print("Enter your last name:")
     last_name = input()
-    new_user = User(first_name=first_name, last_name=last_name)
-    session.add(new_user)
-    session.commit()
-    print(f"User {first_name} {last_name} successfully added!")
-    recipe = add_recipe(new_user)
-    session.add(recipe)
-    session.commit()
+    name_tuple += (last_name,)
+    if not user_exists(session, first_name, last_name):
+        new_user = User(first_name=first_name, last_name=last_name)
+        session.add(new_user)
+        session.commit()
+        print(f"User {first_name} {last_name} successfully added!")
+        recipe = add_recipe(new_user)
+        session.add(recipe)
+        session.commit()
+    else:
+        print(f"Welcom back {first_name} {last_name}!")
+        
+def user_exists(session, first_name, last_name):
+    return session.query(User).filter(func.lower(User.first_name) == func.lower(first_name), func.lower(User.last_name) == func.lower(last_name)).first() is not None
+
 
 def add_recipe(user): 
     print("Enter the recipe name: ")
