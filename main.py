@@ -1,10 +1,11 @@
-from lib.helpers import addFirstName
+from lib.helpers import *
 from lib.db.models import *
 
+madison = User(first_name="madison", last_name="evans")
 
 
 def main():
-    addFirstName()
+    addUser()
 
 
 if __name__ == '__main__':

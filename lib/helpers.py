@@ -1,8 +1,11 @@
 import argparse
 
-def addFirstName():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--name', '-n', type=str, required=True,
-                        help='Enter your name')
-    args = parser.parse_args()
-    print(f"Hello, {args.name}!")
+
+
+def addUser():
+    print("Enter your first name:")
+    first_name = input()
+    print("Enter your last name:")
+    last_name = input()
+    print(f"User {first_name} {last_name} successfully added!")
+    
