@@ -3,17 +3,50 @@ import argparse
 from .db.models import *
 from sqlalchemy import func
 import re
+import sys
+
+def user_option(): 
+    response1 = input("Would you like to search for an existing recipe or enter your own? Type '1' for searching a recipe. Type '2' for entering your own\n")
+    if response1 == "1":
+        recipe_name = input("Enter the name of the recipe you want to search\n")
+        search_for_recipe(recipe_name)
+    elif response1 == "2":
+        # [x] logic for entering your own
+        add_user()
+    else: 
+        # [x] error handling 
+        print("invalid input. try again (enter 1 or 2)\n")
+        user_option()
+        pass
+        
+def search_for_recipe(recipe_name):
+    # [x] query for recipe 
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    recipe = session.query(Recipe).filter(Recipe.recipe_name == recipe_name).first()
+
+    print("\n")
+    print(recipe)
+    while True: 
+        if not recipe: 
+            recipe_name = input("sorry, there is no recipe with this name. Please enter a recipe that exists\n")
+            recipe = session.query(Recipe).filter(Recipe.recipe_name == recipe_name).first()
+
+        elif recipe: 
+            break
+    print("recipe found")
+    print(recipe.instructions)
+    sys.exit(0) 
+    
 
 # function to add new user
-def add_user():
-    
+def add_user():  
     # create a new session to interact with database
     Session = sessionmaker(bind=engine)
     session = Session()
     
     # initialize an empty tuple to store user's first and last name
     name_tuple = ()
-    
     # prompt user to enter first name and add it to name_tuple
 
     print("\n*** Enter your first name:\n")
@@ -55,7 +88,6 @@ def add_user():
 def user_exists(session, first_name, last_name):
     user = session.query(User).filter_by(first_name=first_name, last_name=last_name).first()
     return user
-
 
 
 def add_recipe_ingredient(recipe_id, ingredient_id, qty): 
