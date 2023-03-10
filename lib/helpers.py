@@ -54,6 +54,16 @@ def user_exists(session, first_name, last_name):
     user = session.query(User).filter_by(first_name=first_name, last_name=last_name).first()
     return user
 
+
+
+def add_recipe_ingredients(recipe_id, ingredient_id, qty): 
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    recipe_ingredient = Recipe_Ingredient(recipe_id, ingredient_id, qty)
+    session.add(recipe_ingredient)
+    session.commit()
+
+
 # function to add a recipe for a given user
 def add_recipe(user): 
     # prompt user to enter the recipe name
