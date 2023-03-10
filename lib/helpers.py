@@ -11,16 +11,13 @@ def user_option():
         recipe_name = input("Enter the name of the recipe you want to search\n")
         search_for_recipe(recipe_name)
     elif response1 == "2":
-        # [x] logic for entering your own
         add_user()
     else: 
-        # [x] error handling 
         print("invalid input. try again (enter 1 or 2)\n")
         user_option()
         pass
         
 def search_for_recipe(recipe_name):
-    # [x] query for recipe 
     Session = sessionmaker(bind=engine)
     session = Session()
     recipe = session.query(Recipe).filter(Recipe.recipe_name == recipe_name).first()
@@ -29,7 +26,9 @@ def search_for_recipe(recipe_name):
     print(recipe)
     while True: 
         if not recipe: 
-            recipe_name = input("sorry, there is no recipe with this name. Please enter a recipe that exists\n")
+            recipe_name = input("sorry, there is no recipe with this name. Please enter a recipe that exists. Type 'exit' to kill the program\n")
+            if recipe_name == "exit": 
+                sys.exit(0)
             recipe = session.query(Recipe).filter(Recipe.recipe_name == recipe_name).first()
 
         elif recipe: 
