@@ -1,0 +1,2 @@
+#Possibly use this template(Thank you Madison Evans of The FlatIron School for allowing the use) 
+#for my idea on "Everybody Loves 'Sasha' A practical Cookbook for Creating the Pharmacological Discoveries of Alexander Shulgin"
